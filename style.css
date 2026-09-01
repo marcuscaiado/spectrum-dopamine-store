@@ -293,6 +293,27 @@ body {
   gap: 8px;
 }
 
+.lang-pill-btn {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  padding: 8px 14px;
+  border-radius: 9999px;
+  font-weight: 700;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.lang-pill-btn:hover {
+  background: var(--bg-surface-hover);
+  border-color: var(--accent-yellow);
+  transform: translateY(-2px);
+}
+
 .icon-pill-btn {
   background: var(--bg-surface-2);
   border: 1px solid var(--border-subtle);
@@ -1002,7 +1023,7 @@ body {
 }
 
 /* ============================================================
-   3-IN-1 CYBER AUTH MODAL STYLING
+   CYBER AUTH MODAL STYLING
    ============================================================ */
 
 .auth-modal-card {
@@ -1060,11 +1081,6 @@ body {
 .btn-passkey:hover {
   border-color: var(--accent-yellow);
   box-shadow: 0 0 16px var(--accent-yellow-glow);
-}
-
-.btn-github:hover {
-  border-color: var(--accent-blue);
-  box-shadow: 0 0 16px var(--accent-blue-glow);
 }
 
 .choice-icon {
@@ -1835,6 +1851,10 @@ body {
   }
   .dopamine-meter-wrapper {
     display: none;
+  }
+  .lang-pill-btn {
+    padding: 6px 10px;
+    font-size: 0.75rem;
   }
   .user-pill-btn {
     padding: 8px;

@@ -8,7 +8,7 @@
   <title>SPECTRUM // Next-Gen Dopamine Hardware</title>
   <meta name="title" content="SPECTRUM // Next-Gen Dopamine Hardware">
   <meta name="description" content="Futuristic conceptual devices engineered for the hyperactive mind. Add to cart to trigger pure digital dopamine rushes, play Rex runner, and claim your Quantum Diploma.">
-  <meta name="keywords" content="dopamine, tech parody, conceptual hardware, quad color, rex runner, bugdroid, gadgets, auth">
+  <meta name="keywords" content="dopamine, tech parody, conceptual hardware, quad color, rex runner, bugdroid, gadgets, auth, ptbr">
   <meta name="theme-color" content="#090B0E">
 
   <!-- Open Graph / Facebook / WhatsApp -->
@@ -51,14 +51,14 @@
         <span class="dot dot-yellow"></span>
         <span class="dot dot-green"></span>
       </div>
-      <div class="brand-text">SPECTRUM<span>//LABS</span></div>
+      <div class="brand-text">SPECTRUM<span data-i18n="brandLabs">//LABS</span></div>
     </div>
 
     <!-- Dopamine Level Meter -->
     <div class="dopamine-meter-wrapper" title="Your live Dopamine level">
       <div class="dopamine-label">
         <span class="bolt-icon">⚡</span>
-        <span>DOPAMINE LEVEL</span>
+        <span data-i18n="dopamineLevel">DOPAMINE LEVEL</span>
         <strong id="dopamine-level-badge">LVL 1</strong>
       </div>
       <div class="meter-track">
@@ -67,8 +67,13 @@
       <div class="dopamine-xp" id="dopamine-xp-text">250 / 1000 XP</div>
     </div>
 
-    <!-- Right Controls (Audio, Theme, User Auth, Cart) -->
+    <!-- Right Controls (Audio, Language, Theme, User Auth, Cart) -->
     <div class="nav-controls">
+      <!-- Language Toggle (EN / PT-BR) -->
+      <button class="cart-pill-btn lang-pill-btn" id="lang-toggle" title="Switch Language / Mudar Idioma" aria-label="Toggle Language">
+        <span id="lang-toggle-text">🌐 PT-BR</span>
+      </button>
+
       <!-- Sound FX Audio Mute Toggle -->
       <button class="icon-pill-btn" id="audio-toggle" title="Toggle Sound FX" aria-label="Toggle Audio">
         <span class="audio-icon sound-on" id="sound-on-icon">🔊</span>
@@ -84,13 +89,13 @@
       <!-- Real User Auth Button -->
       <button class="cart-pill-btn user-pill-btn" id="user-auth-btn" aria-label="User Account">
         <span class="user-icon" id="user-auth-icon">👤</span>
-        <span class="user-label" id="user-auth-label">Sign In</span>
+        <span class="user-label" id="user-auth-label" data-i18n="signIn">Sign In</span>
       </button>
 
       <!-- Cart Trigger -->
       <button class="cart-pill-btn" id="cart-toggle-btn" aria-label="View Dopamine Cart">
         <span class="cart-icon">🛒</span>
-        <span class="cart-label">Cart</span>
+        <span class="cart-label" data-i18n="cart">Cart</span>
         <span class="cart-counter-badge" id="cart-counter">0</span>
       </button>
     </div>
@@ -102,24 +107,24 @@
     <section class="hero-section">
       <div class="hero-badge">
         <span class="pulse-indicator"></span>
-        <span>ZERO LATENCY HARDWARE // ZERO CALORIES // 100% SATISFACTION</span>
+        <span data-i18n="heroBadge">ZERO LATENCY HARDWARE // ZERO CALORIES // 100% SATISFACTION</span>
       </div>
       <h1 class="hero-title">
-        Maximum Serotonin.<br>
-        <span class="gradient-text">Instant Delivery.</span>
+        <span data-i18n="heroTitleLine1">Maximum Serotonin.</span><br>
+        <span class="gradient-text" data-i18n="heroTitleLine2">Instant Delivery.</span>
       </h1>
-      <p class="hero-subtitle">
+      <p class="hero-subtitle" data-i18n="heroSubtitle">
         Futuristic conceptual devices engineered for the hyperactive mind. Add to cart to trigger pure digital dopamine rushes.
       </p>
 
       <div class="hero-actions">
         <button class="btn btn-primary" id="feeling-lucky-btn">
           <span class="btn-icon">🎲</span>
-          <span>I'm Feeling Lucky</span>
+          <span data-i18n="btnLucky">I'm Feeling Lucky</span>
         </button>
         <button class="btn btn-secondary" id="rex-quick-jump-btn">
           <span class="btn-icon">🦖</span>
-          <span>Launch Rex Mini-Game</span>
+          <span data-i18n="btnRexGame">Launch Rex Mini-Game</span>
         </button>
       </div>
     </section>
@@ -128,15 +133,15 @@
     <section class="catalog-section">
       <div class="section-header">
         <div>
-          <h2 class="section-title">Hardware Inventions</h2>
-          <p class="section-desc">Handcrafted non-existent tech. Guaranteed 100% satisfaction or 0% refunds.</p>
+          <h2 class="section-title" data-i18n="sectionTitle">Hardware Inventions</h2>
+          <p class="section-desc" data-i18n="sectionDesc">Handcrafted non-existent tech. Guaranteed 100% satisfaction or 0% refunds.</p>
         </div>
         <div class="filter-pills">
-          <button class="filter-pill active" data-filter="all">All Inventions (8)</button>
-          <button class="filter-pill" data-filter="wearable">Wearables</button>
-          <button class="filter-pill" data-filter="robotics">Robotics</button>
-          <button class="filter-pill" data-filter="offline">Offline</button>
-          <button class="filter-pill" data-filter="neural">Neural</button>
+          <button class="filter-pill active" data-filter="all" data-i18n="filterAll">All Inventions (8)</button>
+          <button class="filter-pill" data-filter="wearable" data-i18n="filterWearable">Wearables</button>
+          <button class="filter-pill" data-filter="robotics" data-i18n="filterRobotics">Robotics</button>
+          <button class="filter-pill" data-filter="offline" data-i18n="filterOffline">Offline</button>
+          <button class="filter-pill" data-filter="neural" data-i18n="filterNeural">Neural</button>
         </div>
       </div>
 
@@ -146,23 +151,23 @@
           <div class="card-glow-border"></div>
           <div class="card-media">
             <img src="assets/rex_pod.jpg" alt="Rex Offline Survival Pod" loading="lazy">
-            <span class="media-tag tag-green">🦖 OFFLINE MODE</span>
+            <span class="media-tag tag-green" data-i18n="p_rex_pod_tag">🦖 OFFLINE MODE</span>
           </div>
           <div class="card-content">
             <div class="card-header-row">
-              <h3 class="product-title">Rex Offline Survival Pod</h3>
+              <h3 class="product-title" data-i18n="p_rex_pod_title">Rex Offline Survival Pod</h3>
               <span class="product-price">$0.00 <small>/ Instant</small></span>
             </div>
-            <p class="product-desc">
+            <p class="product-desc" data-i18n="p_rex_pod_desc">
               A portable quantum disruption node that blocks all Wi-Fi and 5G signals within a 10-meter radius so you can jump over 8-bit cacti in total peace.
             </p>
             <div class="product-features">
-              <span>✓ 0.00 kbps speed</span>
-              <span>✓ Infinite battery</span>
-              <span>✓ Anti-meeting shield</span>
+              <span data-i18n="p_rex_pod_f1">✓ 0.00 kbps speed</span>
+              <span data-i18n="p_rex_pod_f2">✓ Infinite battery</span>
+              <span data-i18n="p_rex_pod_f3">✓ Anti-meeting shield</span>
             </div>
             <button class="btn-add-cart" data-id="rex_pod" data-title="Rex Offline Survival Pod" data-icon="🦖" data-color="green" data-xp="300">
-              <span class="btn-label">+ ADD TO CART</span>
+              <span class="btn-label" data-i18n="addToCart">+ ADD TO CART</span>
               <span class="xp-badge">+300 XP ⚡</span>
             </button>
           </div>
@@ -173,23 +178,23 @@
           <div class="card-glow-border"></div>
           <div class="card-media">
             <img src="assets/bugdroid.jpg" alt="Bugdroid Pocket Buddy" loading="lazy">
-            <span class="media-tag tag-blue">🤖 DESK BOT</span>
+            <span class="media-tag tag-blue" data-i18n="p_bugdroid_tag">🤖 DESK BOT</span>
           </div>
           <div class="card-content">
             <div class="card-header-row">
-              <h3 class="product-title">Bugdroid Pocket Buddy</h3>
+              <h3 class="product-title" data-i18n="p_bugdroid_title">Bugdroid Pocket Buddy</h3>
               <span class="product-price">$0.00 <small>/ Instant</small></span>
             </div>
-            <p class="product-desc">
+            <p class="product-desc" data-i18n="p_bugdroid_desc">
               A lime-green desk companion that nods enthusiastically at every refactor you pitch and wiggles its antennae when your code compiles on first try.
             </p>
             <div class="product-features">
-              <span>✓ Unconditional validation</span>
-              <span>✓ Magnetic ears</span>
-              <span>✓ Zero sass</span>
+              <span data-i18n="p_bugdroid_f1">✓ Unconditional validation</span>
+              <span data-i18n="p_bugdroid_f2">✓ Magnetic ears</span>
+              <span data-i18n="p_bugdroid_f3">✓ Zero sass</span>
             </div>
             <button class="btn-add-cart" data-id="bugdroid" data-title="Bugdroid Pocket Buddy" data-icon="🤖" data-color="blue" data-xp="350">
-              <span class="btn-label">+ ADD TO CART</span>
+              <span class="btn-label" data-i18n="addToCart">+ ADD TO CART</span>
               <span class="xp-badge">+350 XP ⚡</span>
             </button>
           </div>
@@ -200,22 +205,22 @@
           <div class="card-glow-border"></div>
           <div class="card-media">
             <img src="assets/incognito_shades.jpg" alt="Real-Life Incognito Shades" loading="lazy">
-            <span class="media-tag tag-red">🕶️ STEALTH</span>
+            <span class="media-tag tag-red" data-i18n="p_incognito_tag">🕶️ STEALTH</span>
           </div>
           <div class="card-content">
             <div class="card-header-row">
-              <h3 class="product-title">Real-Life Incognito Shades</h3>
+              <h3 class="product-title" data-i18n="p_incognito_title">Real-Life Incognito Shades</h3>
               <span class="product-price">$0.00 <small>/ Instant</small></span>
             </div>
-            <p class="product-desc">
+            <p class="product-desc" data-i18n="p_incognito_desc">
               Polarized titanium sunglasses that make casual acquaintances in supermarkets pretend they didn't see you making eye contact.
             </p>
             <div class="product-features">
-              <span>✓ Zero social history</span>
-              <span>✓ 100% UV & Small-talk blocking</span>
+              <span data-i18n="p_incognito_f1">✓ Zero social history</span>
+              <span data-i18n="p_incognito_f2">✓ 100% UV & Small-talk blocking</span>
             </div>
             <button class="btn-add-cart" data-id="incognito" data-title="Real-Life Incognito Shades" data-icon="🕶️" data-color="red" data-xp="280">
-              <span class="btn-label">+ ADD TO CART</span>
+              <span class="btn-label" data-i18n="addToCart">+ ADD TO CART</span>
               <span class="xp-badge">+280 XP ⚡</span>
             </button>
           </div>
@@ -226,23 +231,23 @@
           <div class="card-glow-border"></div>
           <div class="card-media">
             <img src="assets/mind_visor.jpg" alt="Mind Autocomplete Visor" loading="lazy">
-            <span class="media-tag tag-yellow">⚡ 0.0001ms</span>
+            <span class="media-tag tag-yellow" data-i18n="p_mind_visor_tag">⚡ 0.0001ms</span>
           </div>
           <div class="card-content">
             <div class="card-header-row">
-              <h3 class="product-title">Mind Autocomplete Visor</h3>
+              <h3 class="product-title" data-i18n="p_mind_visor_title">Mind Autocomplete Visor</h3>
               <span class="product-price">$0.00 <small>/ Instant</small></span>
             </div>
-            <p class="product-desc">
+            <p class="product-desc" data-i18n="p_mind_visor_desc">
               Predictive neural visor that finishes your sentences and formulates clever replies before your synaptic neurons even complete firing.
             </p>
             <div class="product-features">
-              <span>✓ Telepathic cache</span>
-              <span>✓ Typo-free thoughts</span>
-              <span>✓ Sarcasm tuning</span>
+              <span data-i18n="p_mind_visor_f1">✓ Telepathic cache</span>
+              <span data-i18n="p_mind_visor_f2">✓ Typo-free thoughts</span>
+              <span data-i18n="p_mind_visor_f3">✓ Sarcasm tuning</span>
             </div>
             <button class="btn-add-cart" data-id="mind_visor" data-title="Mind Autocomplete Visor" data-icon="🔮" data-color="yellow" data-xp="420">
-              <span class="btn-label">+ ADD TO CART</span>
+              <span class="btn-label" data-i18n="addToCart">+ ADD TO CART</span>
               <span class="xp-badge">+420 XP ⚡</span>
             </button>
           </div>
@@ -253,22 +258,22 @@
           <div class="card-glow-border"></div>
           <div class="card-media">
             <img src="assets/cloud_vapor.jpg" alt="Bottled 15GB Cloud Vapor" loading="lazy">
-            <span class="media-tag tag-blue">🌐 15GB FREE</span>
+            <span class="media-tag tag-blue" data-i18n="p_cloud_vapor_tag">🌐 15GB FREE</span>
           </div>
           <div class="card-content">
             <div class="card-header-row">
-              <h3 class="product-title">Bottled 15GB Cloud Vapor</h3>
+              <h3 class="product-title" data-i18n="p_cloud_vapor_title">Bottled 15GB Cloud Vapor</h3>
               <span class="product-price">$0.00 <small>/ Instant</small></span>
             </div>
-            <p class="product-desc">
+            <p class="product-desc" data-i18n="p_cloud_vapor_desc">
               Atmospheric server-rack vapor distilled directly from high-density data centers. Inhale to instantly feel like you have infinite decentralized storage.
             </p>
             <div class="product-features">
-              <span>✓ 99.999% uptime aroma</span>
-              <span>✓ Zero physical weight</span>
+              <span data-i18n="p_cloud_vapor_f1">✓ 99.999% uptime aroma</span>
+              <span data-i18n="p_cloud_vapor_f2">✓ Zero physical weight</span>
             </div>
             <button class="btn-add-cart" data-id="cloud_vapor" data-title="Bottled 15GB Cloud Vapor" data-icon="☁️" data-color="blue" data-xp="220">
-              <span class="btn-label">+ ADD TO CART</span>
+              <span class="btn-label" data-i18n="addToCart">+ ADD TO CART</span>
               <span class="xp-badge">+220 XP ⚡</span>
             </button>
           </div>
@@ -279,22 +284,22 @@
           <div class="card-glow-border"></div>
           <div class="card-media">
             <img src="assets/tab_zero.jpg" alt="Tab Zero: Cerebral RAM Reset" loading="lazy">
-            <span class="media-tag tag-red">💊 RAM RESET</span>
+            <span class="media-tag tag-red" data-i18n="p_tab_zero_tag">💊 RAM RESET</span>
           </div>
           <div class="card-content">
             <div class="card-header-row">
-              <h3 class="product-title">Tab Zero: Cerebral RAM Reset</h3>
+              <h3 class="product-title" data-i18n="p_tab_zero_title">Tab Zero: Cerebral RAM Reset</h3>
               <span class="product-price">$0.00 <small>/ Instant</small></span>
             </div>
-            <p class="product-desc">
+            <p class="product-desc" data-i18n="p_tab_zero_desc">
               A minimalist nano-capsule that closes the 87 background tabs running in your subconscious mind so you can fall asleep in under 4 minutes.
             </p>
             <div class="product-features">
-              <span>✓ Memory leak purge</span>
-              <span>✓ Zero existential dread</span>
+              <span data-i18n="p_tab_zero_f1">✓ Memory leak purge</span>
+              <span data-i18n="p_tab_zero_f2">✓ Zero existential dread</span>
             </div>
             <button class="btn-add-cart" data-id="tab_zero" data-title="Tab Zero: Cerebral RAM Reset" data-icon="💊" data-color="red" data-xp="380">
-              <span class="btn-label">+ ADD TO CART</span>
+              <span class="btn-label" data-i18n="addToCart">+ ADD TO CART</span>
               <span class="xp-badge">+380 XP ⚡</span>
             </button>
           </div>
@@ -305,22 +310,22 @@
           <div class="card-glow-border"></div>
           <div class="card-media">
             <img src="assets/recaptcha_ring.jpg" alt="ReCAPTCHA Bypass Ring" loading="lazy">
-            <span class="media-tag tag-green">🚦 100% HUMAN</span>
+            <span class="media-tag tag-green" data-i18n="p_recaptcha_ring_tag">🚦 100% HUMAN</span>
           </div>
           <div class="card-content">
             <div class="card-header-row">
-              <h3 class="product-title">ReCAPTCHA Bypass Ring</h3>
+              <h3 class="product-title" data-i18n="p_recaptcha_ring_title">ReCAPTCHA Bypass Ring</h3>
               <span class="product-price">$0.00 <small>/ Instant</small></span>
             </div>
-            <p class="product-desc">
+            <p class="product-desc" data-i18n="p_recaptcha_ring_desc">
               Titanium biometric smart ring that radiates undeniable human consciousness to every web browser. Never identify another crosswalk or fire hydrant again.
             </p>
             <div class="product-features">
-              <span>✓ Fire hydrant immune</span>
-              <span>✓ Instant checkbox green check</span>
+              <span data-i18n="p_recaptcha_ring_f1">✓ Fire hydrant immune</span>
+              <span data-i18n="p_recaptcha_ring_f2">✓ Instant checkbox green check</span>
             </div>
             <button class="btn-add-cart" data-id="recaptcha_ring" data-title="ReCAPTCHA Bypass Ring" data-icon="🚦" data-color="green" data-xp="320">
-              <span class="btn-label">+ ADD TO CART</span>
+              <span class="btn-label" data-i18n="addToCart">+ ADD TO CART</span>
               <span class="xp-badge">+320 XP ⚡</span>
             </button>
           </div>
@@ -331,22 +336,22 @@
           <div class="card-glow-border"></div>
           <div class="card-media">
             <img src="assets/map_to_nowhere.jpg" alt="Quantum Map to Nowhere" loading="lazy">
-            <span class="media-tag tag-yellow">🧭 ESCAPE GPS</span>
+            <span class="media-tag tag-yellow" data-i18n="p_map_to_nowhere_tag">🧭 ESCAPE GPS</span>
           </div>
           <div class="card-content">
             <div class="card-header-row">
-              <h3 class="product-title">Quantum Map to Nowhere</h3>
+              <h3 class="product-title" data-i18n="p_map_to_nowhere_title">Quantum Map to Nowhere</h3>
               <span class="product-price">$0.00 <small>/ Instant</small></span>
             </div>
-            <p class="product-desc">
+            <p class="product-desc" data-i18n="p_map_to_nowhere_desc">
               Handheld holographic compass that plots turn-by-turn walking routes specifically engineered to avoid awkward social obligations and running into coworkers.
             </p>
             <div class="product-features">
-              <span>✓ Social detour algorithm</span>
-              <span>✓ Scenic void routing</span>
+              <span data-i18n="p_map_to_nowhere_f1">✓ Social detour algorithm</span>
+              <span data-i18n="p_map_to_nowhere_f2">✓ Scenic void routing</span>
             </div>
             <button class="btn-add-cart" data-id="map_to_nowhere" data-title="Quantum Map to Nowhere" data-icon="🧭" data-color="yellow" data-xp="310">
-              <span class="btn-label">+ ADD TO CART</span>
+              <span class="btn-label" data-i18n="addToCart">+ ADD TO CART</span>
               <span class="xp-badge">+310 XP ⚡</span>
             </button>
           </div>
@@ -360,7 +365,7 @@
   <aside class="cart-drawer" id="cart-drawer">
     <div class="cart-drawer-header">
       <div class="cart-drawer-title">
-        <h3>Your Dopamine Stash</h3>
+        <h3 data-i18n="cartTitle">Your Dopamine Stash</h3>
         <span class="cart-items-count" id="cart-drawer-count">0 items</span>
       </div>
       <button class="close-cart-btn" id="close-cart-btn" aria-label="Close Cart">✕</button>
@@ -369,25 +374,25 @@
     <div class="cart-items-list" id="cart-items-container">
       <div class="empty-cart-state">
         <div class="empty-cart-rex">🦖</div>
-        <p class="empty-title">Your cart is currently starved of dopamine.</p>
-        <p class="empty-sub">Hit "+ Add to Cart" on any gadget to trigger instant neuro-satisfaction.</p>
+        <p class="empty-title" data-i18n="cartEmptyTitle">Your cart is currently starved of dopamine.</p>
+        <p class="empty-sub" data-i18n="cartEmptySub">Hit "+ Add to Cart" on any gadget to trigger instant neuro-satisfaction.</p>
         <button class="btn btn-secondary" id="empty-play-rex-btn" style="margin-top: 16px;">
-          <span>Play Rex Runner 🌵</span>
+          <span data-i18n="cartPlayRex">Play Rex Runner 🌵</span>
         </button>
       </div>
     </div>
 
     <div class="cart-drawer-footer">
       <div class="cart-stats-row">
-        <span>Total Cost:</span>
-        <strong class="total-free">$0.00 (Priceless)</strong>
+        <span data-i18n="cartTotalCost">Total Cost:</span>
+        <strong class="total-free" data-i18n="cartTotalFree">$0.00 (Priceless)</strong>
       </div>
       <div class="cart-stats-row">
-        <span>Serotonin Bonus:</span>
+        <span data-i18n="cartSerotoninBonus">Serotonin Bonus:</span>
         <strong class="xp-total" id="cart-xp-sum">+0 XP ⚡</strong>
       </div>
       <button class="checkout-btn" id="checkout-btn">
-        <span>INJECT DOPAMINE (CLAIM CERTIFICATE)</span>
+        <span data-i18n="cartCheckoutBtn">INJECT DOPAMINE (CLAIM CERTIFICATE)</span>
       </button>
     </div>
   </aside>
@@ -410,15 +415,15 @@
       <div class="modal-header">
         <div class="game-title-row">
           <span class="game-icon">🦖</span>
-          <h3>Rex Cactus Runner // 0% WiFi</h3>
+          <h3 data-i18n="rexGameTitle">Rex Cactus Runner // 0% WiFi</h3>
         </div>
         <button class="close-modal-btn" id="close-game-btn">✕</button>
       </div>
       <div class="game-body">
         <canvas id="rex-canvas" width="600" height="200"></canvas>
         <div class="game-controls-bar">
-          <div class="game-score">SCORE: <span id="game-score-val">0</span> | BEST: <span id="game-best-val">0</span></div>
-          <button class="btn btn-primary btn-sm" id="game-jump-btn">SPACE / CLICK TO JUMP</button>
+          <div class="game-score"><span data-i18n="rexScore">SCORE:</span> <span id="game-score-val">0</span> | <span data-i18n="rexBest">BEST:</span> <span id="game-best-val">0</span></div>
+          <button class="btn btn-primary btn-sm" id="game-jump-btn" data-i18n="rexJumpBtn">SPACE / CLICK TO JUMP</button>
         </div>
       </div>
     </div>
@@ -437,7 +442,7 @@
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
           </div>
-          <h3 id="auth-header-title">Operative Authentication</h3>
+          <h3 id="auth-header-title" data-i18n="authHeaderTitle">Operative Authentication</h3>
         </div>
         <button class="close-modal-btn" id="close-auth-btn">✕</button>
       </div>
@@ -448,34 +453,34 @@
       <!-- Logged Out Main View (Biometric Passkey & Email Code) -->
       <div id="auth-main-options-view">
         <div class="auth-intro-box">
-          <p>Authenticate to unlock cloud sync and stamp your official Quantum Dopamine Diploma.</p>
+          <p data-i18n="authIntro">Authenticate to unlock cloud sync and stamp your official Quantum Dopamine Diploma.</p>
         </div>
 
         <!-- Option 1: Biometric Passkey -->
         <button class="auth-choice-btn btn-passkey" id="auth-passkey-btn">
           <span class="choice-icon">🔑</span>
           <div class="choice-text">
-            <strong>1-Click Biometric Passkey</strong>
-            <small>Apple FaceID, Android TouchID, or Windows Hello</small>
+            <strong data-i18n="authPasskeyTitle">1-Click Biometric Passkey</strong>
+            <small data-i18n="authPasskeySub">Apple FaceID, Android TouchID, or Windows Hello</small>
           </div>
           <span class="choice-arrow">⚡</span>
         </button>
 
         <!-- Divider -->
-        <div class="auth-divider"><span>OR EMAIL CODE</span></div>
+        <div class="auth-divider"><span data-i18n="authOrEmail">OR EMAIL CODE</span></div>
 
         <!-- Option 2: Email + Quantum OTP Form -->
         <form class="auth-email-form" id="auth-email-form">
           <div class="form-group">
-            <label for="otp-email-input">Your Email Address</label>
+            <label for="otp-email-input" data-i18n="authEmailLabel">Your Email Address</label>
             <input type="email" id="otp-email-input" placeholder="operative@spectrum.labs" required autocomplete="email">
           </div>
           <div class="form-group">
-            <label for="otp-name-input">Operative Name / Codename</label>
+            <label for="otp-name-input" data-i18n="authNameLabel">Operative Name / Codename</label>
             <input type="text" id="otp-name-input" placeholder="Dr. Quantum Serotonin" required autocomplete="name">
           </div>
           <button type="submit" class="btn btn-primary auth-submit-btn" id="send-otp-btn">
-            <span>DISPATCH 6-DIGIT QUANTUM CODE ✉️</span>
+            <span data-i18n="authDispatchBtn">DISPATCH 6-DIGIT QUANTUM CODE ✉️</span>
           </button>
         </form>
       </div>
@@ -485,9 +490,9 @@
         <div class="otp-transmitter-card">
           <div class="transmitter-header">
             <span class="radar-pulse"></span>
-            <span>TRANSMISSION DISPATCHED</span>
+            <span data-i18n="authTransDispatched">TRANSMISSION DISPATCHED</span>
           </div>
-          <p class="otp-target-desc">We generated a 6-digit cryptographic security code for <strong id="display-otp-email">user@email.com</strong>:</p>
+          <p class="otp-target-desc"><span data-i18n="authTransDesc">We generated a 6-digit cryptographic security code for</span> <strong id="display-otp-email">user@email.com</strong>:</p>
           <div class="holographic-otp-display" id="holographic-otp-display">
             <span class="otp-token-value" id="otp-token-val">849204</span>
             <small>TRANS-CODE // READY</small>
@@ -496,14 +501,14 @@
 
         <form id="otp-confirm-form" class="otp-confirm-form">
           <div class="form-group">
-            <label for="otp-code-input">Enter the 6-Digit Code</label>
+            <label for="otp-code-input" data-i18n="authEnterCodeLabel">Enter the 6-Digit Code</label>
             <input type="text" id="otp-code-input" class="otp-digit-input" placeholder="••••••" maxlength="6" required autocomplete="one-time-code">
           </div>
           <button type="submit" class="btn btn-primary auth-submit-btn" id="confirm-otp-btn">
-            <span>VERIFY & COMPLETE AUTHENTICATION 🚀</span>
+            <span data-i18n="authVerifyBtn">VERIFY & COMPLETE AUTHENTICATION 🚀</span>
           </button>
           <button type="button" class="btn btn-secondary btn-sm" id="otp-back-btn" style="margin-top: 10px; width: 100%;">
-            <span>← Back to Options</span>
+            <span data-i18n="authBackBtn">← Back to Options</span>
           </button>
         </form>
       </div>
@@ -518,10 +523,10 @@
           </div>
         </div>
         <div class="profile-status-badge">
-          <span id="profile-auth-method-badge">✓ 🔑 BIOMETRIC PASSKEY VERIFIED</span>
+          <span id="profile-auth-method-badge" data-i18n="authVerifiedBadge">✓ 🔑 BIOMETRIC PASSKEY VERIFIED</span>
         </div>
         <button class="btn btn-secondary auth-submit-btn" id="signout-btn" style="margin-top: 20px;">
-          <span>SIGN OUT ✕</span>
+          <span data-i18n="authSignOut">SIGN OUT ✕</span>
         </button>
       </div>
     </div>
@@ -536,14 +541,14 @@
       <div class="cert-toolbar no-print">
         <div class="cert-toolbar-title">
           <span class="pulse-indicator"></span>
-          <span>OFFICIAL DIPLOMA ISSUANCE // EXACT 1-PAGE PRINT READY</span>
+          <span data-i18n="certToolbarTitle">OFFICIAL DIPLOMA ISSUANCE // EXACT 1-PAGE PRINT READY</span>
         </div>
         <div class="cert-toolbar-actions">
           <button class="btn btn-primary btn-sm" id="print-cert-btn">
-            <span>🖨️ Print / Save (1 Page)</span>
+            <span data-i18n="certPrintBtn">🖨️ Print / Save (1 Page)</span>
           </button>
           <button class="btn btn-secondary btn-sm" id="close-cert-btn">
-            <span>✕ Close</span>
+            <span data-i18n="certCloseBtn">✕ Close</span>
           </button>
         </div>
       </div>
@@ -582,9 +587,9 @@
 
             <!-- Main Title & Degree of Dopamine -->
             <div class="cert-main-hero">
-              <div class="cert-pretitle">OFFICIAL PARODY ISSUANCE & VERIFICATION OF ACQUISITION</div>
-              <h1 class="cert-diploma-title">QUANTUM DOPAMINE DIPLOMA</h1>
-              <p class="cert-declaration">
+              <div class="cert-pretitle" data-i18n="certPretitle">OFFICIAL PARODY ISSUANCE & VERIFICATION OF ACQUISITION</div>
+              <h1 class="cert-diploma-title" data-i18n="certTitleText">QUANTUM DOPAMINE DIPLOMA</h1>
+              <p class="cert-declaration" data-i18n="certDeclaration">
                 This supreme document certifies that the human operative identified as <strong class="cert-user-name">VERIFIED INVENTOR</strong> has successfully claimed and integrated maximum digital serotonin:
               </p>
             </div>
@@ -592,8 +597,8 @@
             <!-- Itemized Inventions Grid -->
             <div class="cert-claimed-section">
               <div class="cert-claimed-header">
-                <span>INCORPORATED CONCEPTUAL HARDWARE:</span>
-                <span class="cert-status-tag">STATUS: 100% DEPLOYED</span>
+                <span data-i18n="certClaimedHeader">INCORPORATED CONCEPTUAL HARDWARE:</span>
+                <span class="cert-status-tag" data-i18n="certStatusTag">STATUS: 100% DEPLOYED</span>
               </div>
               <div class="cert-items-tag-cloud" id="cert-items-cloud">
                 <!-- Dynamically filled with rich badges -->
@@ -603,16 +608,16 @@
             <!-- Tri-Stat Matrix -->
             <div class="cert-stats-row-grid">
               <div class="cert-metric-box">
-                <span class="metric-label">TOTAL SEROTONIN INJECTED</span>
+                <span class="metric-label" data-i18n="certMetricSerotonin">TOTAL SEROTONIN INJECTED</span>
                 <strong class="metric-value metric-yellow" id="cert-xp-gained">+1,850 XP ⚡</strong>
               </div>
               <div class="cert-metric-box">
-                <span class="metric-label">NETWORK CONNECTIVITY</span>
-                <strong class="metric-value metric-green">0.000% WiFi (REX CERTIFIED)</strong>
+                <span class="metric-label" data-i18n="certMetricNetwork">NETWORK CONNECTIVITY</span>
+                <strong class="metric-value metric-green" id="cert-metric-network-val" data-i18n="certMetricNetworkVal">0.000% WiFi (REX CERTIFIED)</strong>
               </div>
               <div class="cert-metric-box">
-                <span class="metric-label">TOTAL FINANCIAL DEDUCTION</span>
-                <strong class="metric-value metric-blue">$0.00 (ABSOLUTELY PRICELESS)</strong>
+                <span class="metric-label" data-i18n="certMetricFinance">TOTAL FINANCIAL DEDUCTION</span>
+                <strong class="metric-value metric-blue" id="cert-metric-finance-val" data-i18n="certMetricFinanceVal">$0.00 (ABSOLUTELY PRICELESS)</strong>
               </div>
             </div>
 
@@ -622,8 +627,8 @@
               <div class="cert-stamp-badge stamp-bugdroid">
                 <div class="stamp-icon">🤖</div>
                 <div class="stamp-text">
-                  <strong>BUGDROID APPROVED</strong>
-                  <small>Zero Sass / 100% Code Validated</small>
+                  <strong data-i18n="certStampBugdroidTitle">BUGDROID APPROVED</strong>
+                  <small data-i18n="certStampBugdroidSub">Zero Sass / 100% Code Validated</small>
                 </div>
               </div>
 
@@ -631,10 +636,10 @@
               <div class="cert-official-seal">
                 <div class="gold-seal-ring">
                   <div class="seal-inner-star">★</div>
-                  <span class="seal-top-text">SPECTRUM LABS</span>
-                  <span class="seal-center-text">100%</span>
-                  <span class="seal-sub-text">PURE DOPAMINE</span>
-                  <span class="seal-bottom-text">VERIFIED</span>
+                  <span class="seal-top-text" data-i18n="certSealTop">SPECTRUM LABS</span>
+                  <span class="seal-center-text" data-i18n="certSealCenter">100%</span>
+                  <span class="seal-sub-text" data-i18n="certSealSub">PURE DOPAMINE</span>
+                  <span class="seal-bottom-text" data-i18n="certSealBottom">VERIFIED</span>
                 </div>
               </div>
 
@@ -642,15 +647,15 @@
               <div class="cert-stamp-badge stamp-rex">
                 <div class="stamp-icon">🦖</div>
                 <div class="stamp-text">
-                  <strong>REX OFFLINE SHIELD</strong>
-                  <small>Zero WiFi / Cactus Cleared</small>
+                  <strong data-i18n="certStampRexTitle">REX OFFLINE SHIELD</strong>
+                  <small data-i18n="certStampRexSub">Zero WiFi / Cactus Cleared</small>
                 </div>
               </div>
             </div>
 
             <!-- Micro Legal Disclaimer Strip -->
             <div class="cert-disclaimer-strip">
-              <span>ISSUED BY AUTONOMOUS DOPAMINE PROTOCOL // ZERO LATENCY // NOT VALID FOR REAL WORLD CURRENCY // 100% FICTIONAL & AWESOME</span>
+              <span data-i18n="certDisclaimer">ISSUED BY AUTONOMOUS DOPAMINE PROTOCOL // ZERO LATENCY // NOT VALID FOR REAL WORLD CURRENCY // 100% FICTIONAL & AWESOME</span>
               <span id="cert-timestamp-str">TIMESTAMP: 2026-09-01</span>
             </div>
           </div>
@@ -659,6 +664,7 @@
     </div>
   </div>
 
+  <script src="i18n.js"></script>
   <script src="auth.js"></script>
   <script src="app.js"></script>
 </body>

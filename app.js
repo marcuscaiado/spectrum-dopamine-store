@@ -263,7 +263,26 @@
   });
 
   // ------------------------------------------------------------
-  // 4. DOPAMINE LEVEL & METER PROGRESS
+  // 4. LANGUAGE SWITCHER TOGGLE (EN / PT-BR)
+  // ------------------------------------------------------------
+  const langToggleBtn = document.getElementById('lang-toggle');
+  
+  if (langToggleBtn) {
+    langToggleBtn.addEventListener('click', (e) => {
+      playPop(750);
+      if (window.SpectrumI18n) {
+        window.SpectrumI18n.toggleLang();
+      }
+      explodeConfetti(e.clientX, e.clientY, 25);
+      updateCartUI();
+      if (window.SpectrumAuth) {
+        window.SpectrumAuth.updateHeaderUI();
+      }
+    });
+  }
+
+  // ------------------------------------------------------------
+  // 5. DOPAMINE LEVEL & METER PROGRESS
   // ------------------------------------------------------------
   const meterFill = document.getElementById('meter-fill');
   const levelBadge = document.getElementById('dopamine-level-badge');
@@ -316,7 +335,7 @@
   updateDopamineUI();
 
   // ------------------------------------------------------------
-  // 5. CART ENGINE & INTERACTIONS
+  // 6. CART ENGINE & INTERACTIONS
   // ------------------------------------------------------------
   const cartToggleBtn = document.getElementById('cart-toggle-btn');
   const closeCartBtn = document.getElementById('close-cart-btn');
@@ -346,8 +365,10 @@
 
   function updateCartUI() {
     const totalCount = state.cart.length;
+    const isPt = window.SpectrumI18n && window.SpectrumI18n.getLang() === 'pt';
+    
     cartCounter.textContent = totalCount;
-    cartDrawerCount.textContent = `${totalCount} item${totalCount === 1 ? '' : 's'}`;
+    cartDrawerCount.textContent = `${totalCount} ${isPt ? (totalCount === 1 ? 'item' : 'itens') : (totalCount === 1 ? 'item' : 'items')}`;
 
     cartCounter.classList.add('bounce');
     setTimeout(() => cartCounter.classList.remove('bounce'), 300);
@@ -356,10 +377,10 @@
       cartItemsContainer.innerHTML = `
         <div class="empty-cart-state">
           <div class="empty-cart-rex">🦖</div>
-          <p class="empty-title">Your cart is currently starved of dopamine.</p>
-          <p class="empty-sub">Hit "+ Add to Cart" on any gadget to trigger instant neuro-satisfaction.</p>
+          <p class="empty-title">${isPt ? 'Seu carrinho está faminto por dopamina.' : 'Your cart is currently starved of dopamine.'}</p>
+          <p class="empty-sub">${isPt ? 'Clique em "+ Adicionar ao Carrinho" em qualquer invenção para disparar neuro-satisfação.' : 'Hit "+ Add to Cart" on any gadget to trigger instant neuro-satisfaction.'}</p>
           <button class="btn btn-secondary" id="empty-play-rex-btn" style="margin-top: 16px;">
-            <span>Play Rex Runner 🌵</span>
+            <span>${isPt ? 'Jogar Rex Runner 🌵' : 'Play Rex Runner 🌵'}</span>
           </button>
         </div>
       `;
@@ -379,10 +400,11 @@
     cartItemsContainer.innerHTML = state.cart
       .map((item, idx) => {
         totalXP += item.xp;
+        const localizedTitle = (window.SpectrumI18n && window.SpectrumI18n.t(`p_${item.id}_title`)) || item.title;
         return `
           <div class="cart-item-row">
             <div class="cart-item-info">
-              <h4>${item.icon || '⚡'} ${item.title}</h4>
+              <h4>${item.icon || '⚡'} ${localizedTitle}</h4>
               <span>+${item.xp} XP Bonus</span>
             </div>
             <button class="cart-item-remove" data-index="${idx}" title="Remove item">✕</button>
@@ -467,7 +489,7 @@
   });
 
   // ------------------------------------------------------------
-  // 6. QUANTUM DOPAMINE CERTIFICATE MODAL
+  // 7. QUANTUM DOPAMINE CERTIFICATE MODAL
   // ------------------------------------------------------------
   const certModal = document.getElementById('certificate-modal');
   const closeCertBtn = document.getElementById('close-cert-btn');
@@ -495,18 +517,22 @@
 
     if (purchasedItems.length > 0) {
       certItemsCloud.innerHTML = purchasedItems
-        .map((item) => `
-          <div class="cert-item-chip" data-color="${item.color}">
-            <span>${item.icon || '⚡'}</span>
-            <span>${item.title}</span>
-          </div>
-        `)
+        .map((item) => {
+          const localizedTitle = (window.SpectrumI18n && window.SpectrumI18n.t(`p_${item.id}_title`)) || item.title;
+          return `
+            <div class="cert-item-chip" data-color="${item.color}">
+              <span>${item.icon || '⚡'}</span>
+              <span>${localizedTitle}</span>
+            </div>
+          `;
+        })
         .join('');
     } else {
+      const bundleText = window.SpectrumI18n && window.SpectrumI18n.getLang() === 'pt' ? 'Pacote Quântico Spectrum Core (8 Invenções)' : 'Quantum Spectrum Core Bundle (8 Inventions)';
       certItemsCloud.innerHTML = `
         <div class="cert-item-chip" data-color="blue">
           <span>⚡</span>
-          <span>Quantum Spectrum Core Bundle (8 Inventions)</span>
+          <span>${bundleText}</span>
         </div>
       `;
     }
@@ -531,12 +557,13 @@
   });
 
   // ------------------------------------------------------------
-  // 7. AUTH-GATED CHECKOUT PROCESS
+  // 8. AUTH-GATED CHECKOUT PROCESS
   // ------------------------------------------------------------
   function executeCheckout() {
     if (state.cart.length === 0) {
       playPop(300);
-      alert('Your cart is empty! Add some high-tech dopamine first!');
+      const emptyMsg = window.SpectrumI18n && window.SpectrumI18n.getLang() === 'pt' ? 'Seu carrinho está vazio! Adicione dopamina primeiro!' : 'Your cart is empty! Add some high-tech dopamine first!';
+      alert(emptyMsg);
       return;
     }
 
@@ -554,7 +581,8 @@
   checkoutBtn.addEventListener('click', () => {
     if (state.cart.length === 0) {
       playPop(300);
-      alert('Your cart is empty! Add some high-tech dopamine first!');
+      const emptyMsg = window.SpectrumI18n && window.SpectrumI18n.getLang() === 'pt' ? 'Seu carrinho está vazio! Adicione dopamina primeiro!' : 'Your cart is empty! Add some high-tech dopamine first!';
+      alert(emptyMsg);
       return;
     }
 
@@ -567,7 +595,8 @@
       const authModal = document.getElementById('auth-modal');
       authModal.classList.add('active');
       
-      showAuthAlert('🔒 Operative Authentication Required: Sign in with Passkey or Email Code to finish checkout and claim your Quantum Diploma.', 'error');
+      const gateMsg = window.SpectrumI18n ? window.SpectrumI18n.t('authGateAlert') : '🔒 Operative Authentication Required: Sign in with Passkey or Email Code to finish checkout and claim your Quantum Diploma.';
+      showAuthAlert(gateMsg, 'error');
       return;
     }
 
@@ -576,7 +605,7 @@
   });
 
   // ------------------------------------------------------------
-  // 8. REX RUNNER 2D CANVAS MINI-GAME
+  // 9. REX RUNNER 2D CANVAS MINI-GAME
   // ------------------------------------------------------------
   const rexModal = document.getElementById('rex-game-modal');
   const closeGameBtn = document.getElementById('close-game-btn');
@@ -704,11 +733,12 @@
         const xpAwarded = Math.floor(gameScore * 2);
         addXP(xpAwarded, rexCanvas);
 
+        const isPt = window.SpectrumI18n && window.SpectrumI18n.getLang() === 'pt';
         rexCtx.fillStyle = '#FFFFFF';
         rexCtx.font = 'bold 16px Space Grotesk, sans-serif';
         rexCtx.textAlign = 'center';
-        rexCtx.fillText(`GAME OVER! +${xpAwarded} XP GAINED`, rexCanvas.width / 2, 70);
-        rexCtx.fillText('CLICK JUMP OR SPACE TO RESTART', rexCanvas.width / 2, 95);
+        rexCtx.fillText(isPt ? `FIM DE JOGO! +${xpAwarded} XP GANHO` : `GAME OVER! +${xpAwarded} XP GAINED`, rexCanvas.width / 2, 70);
+        rexCtx.fillText(isPt ? 'CLIQUE PULAR OU ESPAÇO PARA REINICIAR' : 'CLICK JUMP OR SPACE TO RESTART', rexCanvas.width / 2, 95);
         rexCtx.textAlign = 'left';
         return;
       }
@@ -740,14 +770,17 @@
   // Mascot Bugdroid feedback
   document.getElementById('mascot-bugdroid').addEventListener('click', (e) => {
     playPop(620);
-    const phrases = ['Compiling cleanly! ✨', 'Zero bugs detected! 💚', 'Refactor approved! 🚀', 'Nodding at your idea! 🤖'];
-    const p = phrases[Math.floor(Math.random() * phrases.length)];
+    const isPt = window.SpectrumI18n && window.SpectrumI18n.getLang() === 'pt';
+    const phrasesEn = ['Compiling cleanly! ✨', 'Zero bugs detected! 💚', 'Refactor approved! 🚀', 'Nodding at your idea! 🤖'];
+    const phrasesPt = ['Compilando lisinho! ✨', 'Zero bugs detectados! 💚', 'Refatoração aprovada! 🚀', 'Concordando com a sua ideia! 🤖'];
+    const pool = isPt ? phrasesPt : phrasesEn;
+    const p = pool[Math.floor(Math.random() * pool.length)];
     document.getElementById('bugdroid-speech').textContent = p;
     explodeConfetti(e.clientX, e.clientY, 15);
   });
 
   // ------------------------------------------------------------
-  // 9. CYBER AUTH MODAL CONTROLLER
+  // 10. CYBER AUTH MODAL CONTROLLER
   // ------------------------------------------------------------
   const userAuthBtn = document.getElementById('user-auth-btn');
   const authModal = document.getElementById('auth-modal');
@@ -826,7 +859,8 @@
   // 1. Biometric Passkey Click Handler
   authPasskeyBtn.addEventListener('click', async () => {
     try {
-      showAuthAlert('Awaiting device biometric verification (FaceID / TouchID / PIN)...', 'success');
+      const msg = window.SpectrumI18n && window.SpectrumI18n.getLang() === 'pt' ? 'Aguardando validação biométrica do dispositivo (FaceID / TouchID / PIN)...' : 'Awaiting device biometric verification (FaceID / TouchID / PIN)...';
+      showAuthAlert(msg, 'success');
       const user = await window.SpectrumAuth.authenticateWithPasskey();
       onAuthSuccess(user);
     } catch (err) {
