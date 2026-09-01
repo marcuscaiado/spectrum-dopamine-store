@@ -567,7 +567,7 @@
       const authModal = document.getElementById('auth-modal');
       authModal.classList.add('active');
       
-      showAuthAlert('🔒 Operative Authentication Required: Sign in with a Passkey, Email Code, or GitHub to finish checkout and claim your Quantum Diploma.', 'error');
+      showAuthAlert('🔒 Operative Authentication Required: Sign in with Passkey or Email Code to finish checkout and claim your Quantum Diploma.', 'error');
       return;
     }
 
@@ -747,7 +747,7 @@
   });
 
   // ------------------------------------------------------------
-  // 9. 3-IN-1 CYBER AUTH MODAL CONTROLLER
+  // 9. CYBER AUTH MODAL CONTROLLER
   // ------------------------------------------------------------
   const userAuthBtn = document.getElementById('user-auth-btn');
   const authModal = document.getElementById('auth-modal');
@@ -760,7 +760,6 @@
 
   const authPasskeyBtn = document.getElementById('auth-passkey-btn');
   const authEmailForm = document.getElementById('auth-email-form');
-  const authGithubBtn = document.getElementById('auth-github-btn');
 
   const otpConfirmForm = document.getElementById('otp-confirm-form');
   const otpBackBtn = document.getElementById('otp-back-btn');
@@ -845,7 +844,7 @@
       const result = window.SpectrumAuth.requestEmailOtp(email, name);
       document.getElementById('display-otp-email').textContent = result.email;
       document.getElementById('otp-token-val').textContent = result.code;
-      document.getElementById('otp-code-input').value = result.code; // Pre-fill or ready for click
+      document.getElementById('otp-code-input').value = result.code;
       
       setAuthView('otp');
       playDopamineChime();
@@ -865,17 +864,6 @@
       onAuthSuccess(user);
     } catch (err) {
       showAuthAlert(err.message);
-    }
-  });
-
-  // 3. GitHub 1-Click Connect Handler
-  authGithubBtn.addEventListener('click', async () => {
-    const handle = prompt('Enter your GitHub username (or press OK for @operative):', 'marcuscaiado');
-    try {
-      const user = await window.SpectrumAuth.authenticateWithGitHub(handle);
-      onAuthSuccess(user);
-    } catch (err) {
-      showAuthAlert('GitHub authentication error');
     }
   });
 
