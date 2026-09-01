@@ -8,7 +8,7 @@
   <title>SPECTRUM // Next-Gen Dopamine Hardware</title>
   <meta name="title" content="SPECTRUM // Next-Gen Dopamine Hardware">
   <meta name="description" content="Futuristic conceptual devices engineered for the hyperactive mind. Add to cart to trigger pure digital dopamine rushes, play Rex runner, and claim your Quantum Diploma.">
-  <meta name="keywords" content="dopamine, tech parody, conceptual hardware, quad color, rex runner, bugdroid, gadgets">
+  <meta name="keywords" content="dopamine, tech parody, conceptual hardware, quad color, rex runner, bugdroid, gadgets, auth">
   <meta name="theme-color" content="#090B0E">
 
   <!-- Open Graph / Facebook / WhatsApp -->
@@ -27,6 +27,10 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  
+  <!-- Supabase CDN Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -66,10 +70,10 @@
       <div class="dopamine-xp" id="dopamine-xp-text">250 / 1000 XP</div>
     </div>
 
-    <!-- Right Controls (Audio, Theme, Cart) -->
+    <!-- Right Controls (Audio, Theme, User Auth, Cart) -->
     <div class="nav-controls">
-      <!-- 5b. Sound FX Audio Mute Toggle -->
-      <button class="icon-pill-btn" id="audio-toggle" title="Toggle Sound FX (Mute/Unmute)" aria-label="Toggle Audio">
+      <!-- Sound FX Audio Mute Toggle -->
+      <button class="icon-pill-btn" id="audio-toggle" title="Toggle Sound FX" aria-label="Toggle Audio">
         <span class="audio-icon sound-on" id="sound-on-icon">🔊</span>
         <span class="audio-icon sound-off" id="sound-off-icon" style="display: none;">🔇</span>
       </button>
@@ -78,6 +82,12 @@
       <button class="icon-pill-btn" id="theme-toggle" title="Toggle Light / Dark Mode" aria-label="Toggle Theme">
         <span class="theme-icon sun-icon">☀️</span>
         <span class="theme-icon moon-icon">🌙</span>
+      </button>
+
+      <!-- Real User Auth Button -->
+      <button class="cart-pill-btn user-pill-btn" id="user-auth-btn" aria-label="User Account">
+        <span class="user-icon" id="user-auth-icon">👤</span>
+        <span class="user-label" id="user-auth-label">Sign In</span>
       </button>
 
       <!-- Cart Trigger -->
@@ -418,6 +428,119 @@
   </div>
 
   <!-- ============================================================
+       CYBER AUTHENTICATION MODAL (SIGN IN / SIGN UP / VERIFICATION)
+       ============================================================ -->
+  <div class="modal-backdrop" id="auth-modal">
+    <div class="auth-modal-card">
+      <div class="modal-header">
+        <div class="auth-title-row">
+          <div class="orbit-dots">
+            <span class="dot dot-blue"></span>
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <h3 id="auth-header-title">Operative Access</h3>
+        </div>
+        <button class="close-modal-btn" id="close-auth-btn">✕</button>
+      </div>
+
+      <!-- Auth Tab Navigation -->
+      <div class="auth-tabs-row" id="auth-tabs-nav">
+        <button class="auth-tab active" id="tab-btn-signin">Sign In</button>
+        <button class="auth-tab" id="tab-btn-signup">Create Account</button>
+        <button class="auth-tab" id="tab-btn-config">⚡ Cloud Config</button>
+      </div>
+
+      <!-- Form Error / Success Message -->
+      <div class="auth-alert" id="auth-alert" style="display: none;"></div>
+
+      <!-- Sign In Form -->
+      <form class="auth-form" id="signin-form">
+        <div class="form-group">
+          <label for="signin-email">Email Address</label>
+          <input type="email" id="signin-email" placeholder="operative@spectrum.labs" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="signin-password">Secret Key (Password)</label>
+          <input type="password" id="signin-password" placeholder="••••••••••••" required autocomplete="current-password">
+        </div>
+        <button type="submit" class="btn btn-primary auth-submit-btn" id="signin-submit-btn">
+          <span>AUTHENTICATE OPERATIVE 🚀</span>
+        </button>
+      </form>
+
+      <!-- Sign Up Form (With Email Verification) -->
+      <form class="auth-form" id="signup-form" style="display: none;">
+        <div class="form-group">
+          <label for="signup-name">Operative Codename (Full Name)</label>
+          <input type="text" id="signup-name" placeholder="Dr. Quantum Serotonin" required autocomplete="name">
+        </div>
+        <div class="form-group">
+          <label for="signup-email">Real Email (Verification Required)</label>
+          <input type="email" id="signup-email" placeholder="real.email@domain.com" required autocomplete="email">
+        </div>
+        <div class="form-group">
+          <label for="signup-password">Create Secret Key (Min 6 chars)</label>
+          <input type="password" id="signup-password" placeholder="••••••••••••" minlength="6" required autocomplete="new-password">
+        </div>
+        <button type="submit" class="btn btn-primary auth-submit-btn" id="signup-submit-btn">
+          <span>CREATE ACCOUNT & SEND VERIFICATION EMAIL ✉️</span>
+        </button>
+      </form>
+
+      <!-- Verification Pending Screen -->
+      <div class="auth-verify-view" id="verify-pending-view" style="display: none;">
+        <div class="verify-icon-pulse">✉️</div>
+        <h4>Confirmation Email Dispatched!</h4>
+        <p class="verify-instructions">
+          We sent a cryptographic verification link to <strong id="verify-target-email">operative@email.com</strong>.<br>
+          Please click the link in your inbox to confirm your account and unlock verified status.
+        </p>
+        <div class="verify-actions">
+          <button class="btn btn-secondary btn-sm" id="verify-back-btn">Back to Sign In</button>
+        </div>
+      </div>
+
+      <!-- Supabase Cloud Credentials Config Tab -->
+      <div class="auth-config-view" id="auth-config-view" style="display: none;">
+        <div class="config-guide">
+          <h4>Connect Free Supabase Project</h4>
+          <p>Get your free keys at <a href="https://supabase.com" target="_blank" rel="noopener">supabase.com</a> (50k MAU free):</p>
+        </div>
+        <div class="form-group">
+          <label for="config-supabase-url">Supabase Project URL</label>
+          <input type="url" id="config-supabase-url" placeholder="https://xyzcompany.supabase.co">
+        </div>
+        <div class="form-group">
+          <label for="config-supabase-key">Supabase Anon Public Key</label>
+          <input type="password" id="config-supabase-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
+        </div>
+        <button class="btn btn-primary auth-submit-btn" id="save-config-btn">
+          <span>SAVE & ACTIVATE CLOUD AUTH ✨</span>
+        </button>
+      </div>
+
+      <!-- Logged In Profile View (If already authenticated) -->
+      <div class="auth-profile-view" id="auth-profile-view" style="display: none;">
+        <div class="profile-header-box">
+          <div class="profile-avatar">🟢</div>
+          <div class="profile-info">
+            <h4 id="profile-name-text">Operative Name</h4>
+            <span id="profile-email-text">user@email.com</span>
+          </div>
+        </div>
+        <div class="profile-status-badge">
+          <span>✓ EMAIL VERIFIED & CLOUD SYNC ACTIVE</span>
+        </div>
+        <button class="btn btn-secondary auth-submit-btn" id="signout-btn" style="margin-top: 16px;">
+          <span>SIGN OUT ✕</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
        PREMIUM HIGH-TECH QUANTUM DOPAMINE CERTIFICATE MODAL
        ============================================================ -->
   <div class="modal-backdrop" id="certificate-modal">
@@ -549,6 +672,7 @@
     </div>
   </div>
 
+  <script src="auth.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

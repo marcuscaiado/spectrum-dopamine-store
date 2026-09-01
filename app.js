@@ -89,7 +89,7 @@
       if (!audioCtx) return;
       if (audioCtx.state === 'suspended') audioCtx.resume();
 
-      const notes = [523.25, 659.25, 783.99, 1046.5]; // C5, E5, G5, C6
+      const notes = [523.25, 659.25, 783.99, 1046.5];
       notes.forEach((freq, idx) => {
         const osc = audioCtx.createOscillator();
         const gain = audioCtx.createGain();
@@ -510,6 +510,14 @@
       `;
     }
 
+    // Check if user is logged in for diploma name
+    if (window.SpectrumAuth && window.SpectrumAuth.state.user) {
+      const user = window.SpectrumAuth.state.user;
+      const name = user.user_metadata?.full_name || user.email.split('@')[0];
+      const certUserName = document.querySelector('.cert-user-name');
+      if (certUserName) certUserName.textContent = `${name.toUpperCase()} (${user.email})`;
+    }
+
     certModal.classList.add('active');
     playCheckoutFanfare();
 
@@ -625,7 +633,7 @@
     }
 
     // Draw 8-bit Rex
-    rexCtx.fillStyle = '#81C995'; // Green
+    rexCtx.fillStyle = '#81C995';
     rexCtx.font = '28px sans-serif';
     rexCtx.fillText('🦖', rex.x, rex.y + 24);
 
@@ -647,7 +655,7 @@
       const c = cacti[i];
       c.x -= cactusSpeed;
 
-      rexCtx.fillStyle = '#F28B82'; // Coral Red Cactus
+      rexCtx.fillStyle = '#F28B82';
       rexCtx.font = '24px sans-serif';
       rexCtx.fillText('🌵', c.x, c.y + 22);
 
@@ -709,6 +717,155 @@
     const p = phrases[Math.floor(Math.random() * phrases.length)];
     document.getElementById('bugdroid-speech').textContent = p;
     explodeConfetti(e.clientX, e.clientY, 15);
+  });
+
+  // ------------------------------------------------------------
+  // 8. AUTH MODAL & FORM CONTROLLERS
+  // ------------------------------------------------------------
+  const userAuthBtn = document.getElementById('user-auth-btn');
+  const authModal = document.getElementById('auth-modal');
+  const closeAuthBtn = document.getElementById('close-auth-btn');
+  const authAlert = document.getElementById('auth-alert');
+
+  const tabBtnSignin = document.getElementById('tab-btn-signin');
+  const tabBtnSignup = document.getElementById('tab-btn-signup');
+  const tabBtnConfig = document.getElementById('tab-btn-config');
+
+  const signinForm = document.getElementById('signin-form');
+  const signupForm = document.getElementById('signup-form');
+  const verifyPendingView = document.getElementById('verify-pending-view');
+  const authConfigView = document.getElementById('auth-config-view');
+  const authProfileView = document.getElementById('auth-profile-view');
+
+  const configSupabaseUrl = document.getElementById('config-supabase-url');
+  const configSupabaseKey = document.getElementById('config-supabase-key');
+  const saveConfigBtn = document.getElementById('save-config-btn');
+  const signoutBtn = document.getElementById('signout-btn');
+  const verifyBackBtn = document.getElementById('verify-back-btn');
+
+  function showAuthAlert(msg, type = 'error') {
+    authAlert.textContent = msg;
+    authAlert.className = `auth-alert ${type}`;
+    authAlert.style.display = 'block';
+  }
+
+  function hideAuthAlert() {
+    authAlert.style.display = 'none';
+  }
+
+  function setAuthTab(tab) {
+    hideAuthAlert();
+    tabBtnSignin.classList.remove('active');
+    tabBtnSignup.classList.remove('active');
+    tabBtnConfig.classList.remove('active');
+
+    signinForm.style.display = 'none';
+    signupForm.style.display = 'none';
+    verifyPendingView.style.display = 'none';
+    authConfigView.style.display = 'none';
+    authProfileView.style.display = 'none';
+
+    if (tab === 'signin') {
+      tabBtnSignin.classList.add('active');
+      signinForm.style.display = 'flex';
+    } else if (tab === 'signup') {
+      tabBtnSignup.classList.add('active');
+      signupForm.style.display = 'flex';
+    } else if (tab === 'config') {
+      tabBtnConfig.classList.add('active');
+      authConfigView.style.display = 'flex';
+      configSupabaseUrl.value = window.SpectrumAuth?.state?.supabaseUrl || '';
+      configSupabaseKey.value = window.SpectrumAuth?.state?.supabaseKey || '';
+    } else if (tab === 'profile') {
+      authProfileView.style.display = 'block';
+    } else if (tab === 'verify') {
+      verifyPendingView.style.display = 'block';
+    }
+  }
+
+  userAuthBtn.addEventListener('click', () => {
+    playPop(600);
+    authModal.classList.add('active');
+
+    if (window.SpectrumAuth && window.SpectrumAuth.state.user) {
+      const user = window.SpectrumAuth.state.user;
+      document.getElementById('profile-name-text').textContent = user.user_metadata?.full_name || 'Operative';
+      document.getElementById('profile-email-text').textContent = user.email;
+      setAuthTab('profile');
+    } else {
+      setAuthTab('signin');
+    }
+  });
+
+  closeAuthBtn.addEventListener('click', () => authModal.classList.remove('active'));
+  tabBtnSignin.addEventListener('click', () => setAuthTab('signin'));
+  tabBtnSignup.addEventListener('click', () => setAuthTab('signup'));
+  tabBtnConfig.addEventListener('click', () => setAuthTab('config'));
+  verifyBackBtn.addEventListener('click', () => setAuthTab('signin'));
+
+  // Handle Sign In Submit
+  signinForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideAuthAlert();
+    const email = document.getElementById('signin-email').value;
+    const password = document.getElementById('signin-password').value;
+
+    try {
+      showAuthAlert('Authenticating...', 'success');
+      await window.SpectrumAuth.signIn(email, password);
+      playCheckoutFanfare();
+      explodeConfetti(window.innerWidth / 2, window.innerHeight / 2, 60);
+      authModal.classList.remove('active');
+    } catch (err) {
+      showAuthAlert(err.message || 'Authentication failed');
+    }
+  });
+
+  // Handle Sign Up Submit (With Email Verification)
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    hideAuthAlert();
+    const name = document.getElementById('signup-name').value;
+    const email = document.getElementById('signup-email').value;
+    const password = document.getElementById('signup-password').value;
+
+    try {
+      showAuthAlert('Dispatching verification email...', 'success');
+      await window.SpectrumAuth.signUp(email, password, name);
+      document.getElementById('verify-target-email').textContent = email;
+      setAuthTab('verify');
+      playDopamineChime();
+    } catch (err) {
+      showAuthAlert(err.message || 'Signup failed');
+    }
+  });
+
+  // Save Cloud Credentials
+  saveConfigBtn.addEventListener('click', () => {
+    const url = configSupabaseUrl.value;
+    const key = configSupabaseKey.value;
+    if (!url || !key) {
+      showAuthAlert('Please provide both Supabase Project URL and Anon Key');
+      return;
+    }
+    window.SpectrumAuth.saveCredentials(url, key);
+    showAuthAlert('Supabase credentials saved successfully! ✨', 'success');
+    playPop(700);
+  });
+
+  // Sign Out
+  signoutBtn.addEventListener('click', async () => {
+    await window.SpectrumAuth.signOut();
+    playPop(400);
+    authModal.classList.remove('active');
+  });
+
+  // Email Verified Celebration Listener
+  window.addEventListener('spectrum:auth_verified', (e) => {
+    const user = e.detail;
+    addXP(1000, userAuthBtn);
+    playCheckoutFanfare();
+    explodeConfetti(window.innerWidth / 2, window.innerHeight / 2, 100);
   });
 
   updateCartUI();
