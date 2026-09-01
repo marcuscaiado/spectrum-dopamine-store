@@ -1002,7 +1002,7 @@ body {
 }
 
 /* ============================================================
-   CYBER AUTHENTICATION MODAL STYLES
+   3-IN-1 CYBER AUTH MODAL STYLING
    ============================================================ */
 
 .auth-modal-card {
@@ -1026,60 +1026,98 @@ body {
   font-size: 1.25rem;
 }
 
-.auth-tabs-row {
-  display: flex;
-  gap: 6px;
+.auth-intro-box {
   background: var(--bg-surface-2);
-  padding: 4px;
-  border-radius: 9999px;
   border: 1px solid var(--border-subtle);
-  margin: 20px 0 16px;
-}
-
-.auth-tab {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: var(--text-secondary);
-  padding: 8px 12px;
-  border-radius: 9999px;
-  font-size: 0.8rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.auth-tab.active {
-  background: var(--text-primary);
-  color: var(--bg-canvas);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-.auth-alert {
-  padding: 10px 14px;
-  border-radius: 12px;
+  border-radius: 14px;
+  padding: 12px 14px;
+  margin: 16px 0 20px;
   font-size: 0.82rem;
-  font-weight: 600;
-  margin-bottom: 16px;
+  color: var(--text-secondary);
   line-height: 1.4;
 }
 
-.auth-alert.error {
-  background: rgba(242, 139, 130, 0.15);
-  border: 1px solid var(--accent-red-glow);
-  color: var(--accent-red);
+.auth-choice-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+  text-align: left;
 }
 
-.auth-alert.success {
-  background: rgba(129, 201, 149, 0.15);
-  border: 1px solid var(--accent-green-glow);
-  color: var(--accent-green);
+.auth-choice-btn:hover {
+  background: var(--bg-surface-hover);
+  transform: translateY(-2px);
 }
 
-.auth-form {
+.btn-passkey:hover {
+  border-color: var(--accent-yellow);
+  box-shadow: 0 0 16px var(--accent-yellow-glow);
+}
+
+.btn-github:hover {
+  border-color: var(--accent-blue);
+  box-shadow: 0 0 16px var(--accent-blue-glow);
+}
+
+.choice-icon {
+  font-size: 1.8rem;
+}
+
+.choice-text {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+}
+
+.choice-text strong {
+  font-size: 0.92rem;
+}
+
+.choice-text small {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.choice-arrow {
+  font-size: 1.1rem;
+  color: var(--text-muted);
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 20px 0;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+.auth-divider span {
+  padding: 0 10px;
+}
+
+.auth-email-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
 .form-group {
@@ -1113,64 +1151,101 @@ body {
 
 .auth-submit-btn {
   width: 100%;
-  margin-top: 8px;
+  margin-top: 6px;
   padding: 14px;
   justify-content: center;
 }
 
-.auth-verify-view {
+.auth-alert {
+  padding: 10px 14px;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-top: 14px;
+  line-height: 1.4;
+}
+
+.auth-alert.error {
+  background: rgba(242, 139, 130, 0.15);
+  border: 1px solid var(--accent-red-glow);
+  color: var(--accent-red);
+}
+
+.auth-alert.success {
+  background: rgba(129, 201, 149, 0.15);
+  border: 1px solid var(--accent-green-glow);
+  color: var(--accent-green);
+}
+
+/* OTP Transmitter Sub-View */
+.otp-transmitter-card {
+  background: var(--bg-surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: 16px;
+  padding: 16px;
+  margin: 16px 0;
   text-align: center;
-  padding: 24px 10px;
 }
 
-.verify-icon-pulse {
-  font-size: 3.5rem;
-  margin-bottom: 16px;
-  animation: pulseBolt 2s infinite ease-in-out;
+.transmitter-header {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.68rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: var(--accent-green);
+  margin-bottom: 8px;
 }
 
-.auth-verify-view h4 {
-  font-family: 'Space Grotesk', sans-serif;
-  font-size: 1.25rem;
-  margin-bottom: 10px;
+.radar-pulse {
+  width: 8px;
+  height: 8px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  animation: pulseDot 1.5s infinite;
 }
 
-.verify-instructions {
+.otp-target-desc {
+  font-size: 0.82rem;
   color: var(--text-secondary);
-  font-size: 0.88rem;
-  line-height: 1.5;
-  margin-bottom: 24px;
+  margin-bottom: 12px;
 }
 
-.verify-instructions strong {
-  color: var(--accent-blue);
-}
-
-.auth-config-view {
+.holographic-otp-display {
+  background: #090B0E;
+  border: 1px dashed var(--accent-green);
+  border-radius: 12px;
+  padding: 12px;
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  align-items: center;
+  box-shadow: 0 0 16px var(--accent-green-glow);
 }
 
-.config-guide h4 {
-  font-size: 0.95rem;
-  margin-bottom: 4px;
+.otp-token-value {
+  font-family: 'Space Mono', monospace;
+  font-size: 1.8rem;
+  font-weight: 800;
+  letter-spacing: 0.25em;
+  color: var(--accent-green);
 }
 
-.config-guide p {
-  font-size: 0.8rem;
-  color: var(--text-secondary);
+.holographic-otp-display small {
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  letter-spacing: 0.1em;
+  margin-top: 2px;
 }
 
-.config-guide a {
-  color: var(--accent-blue);
-  text-decoration: underline;
+.otp-digit-input {
+  text-align: center;
+  font-family: 'Space Mono', monospace;
+  font-size: 1.4rem !important;
+  letter-spacing: 0.3em;
 }
 
-.auth-profile-view {
-  padding: 10px 0;
-}
-
+/* Profile view inside auth modal */
 .profile-header-box {
   display: flex;
   align-items: center;
@@ -1178,16 +1253,16 @@ body {
   background: var(--bg-surface-2);
   border: 1px solid var(--border-subtle);
   border-radius: 16px;
-  padding: 14px 18px;
-  margin-bottom: 16px;
+  padding: 16px;
+  margin: 16px 0;
 }
 
 .profile-avatar {
-  font-size: 2rem;
+  font-size: 2.2rem;
 }
 
 .profile-info h4 {
-  font-size: 1.05rem;
+  font-size: 1.1rem;
   margin-bottom: 2px;
 }
 
@@ -1201,9 +1276,9 @@ body {
   background: rgba(129, 201, 149, 0.15);
   border: 1px solid var(--accent-green-glow);
   color: var(--accent-green);
-  padding: 10px 14px;
+  padding: 12px 14px;
   border-radius: 12px;
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   font-weight: 800;
   text-align: center;
 }

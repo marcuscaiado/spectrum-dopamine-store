@@ -28,9 +28,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@500;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
   
-  <!-- Supabase CDN Client -->
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -428,7 +425,7 @@
   </div>
 
   <!-- ============================================================
-       CYBER AUTHENTICATION MODAL (SIGN IN / SIGN UP / VERIFICATION)
+       3-IN-1 CYBER AUTH MODAL (PASSKEYS, EMAIL OTP, GITHUB)
        ============================================================ -->
   <div class="modal-backdrop" id="auth-modal">
     <div class="auth-modal-card">
@@ -440,100 +437,103 @@
             <span class="dot dot-yellow"></span>
             <span class="dot dot-green"></span>
           </div>
-          <h3 id="auth-header-title">Operative Access</h3>
+          <h3 id="auth-header-title">Operative Authentication</h3>
         </div>
         <button class="close-modal-btn" id="close-auth-btn">✕</button>
       </div>
 
-      <!-- Auth Tab Navigation -->
-      <div class="auth-tabs-row" id="auth-tabs-nav">
-        <button class="auth-tab active" id="tab-btn-signin">Sign In</button>
-        <button class="auth-tab" id="tab-btn-signup">Create Account</button>
-        <button class="auth-tab" id="tab-btn-config">⚡ Cloud Config</button>
-      </div>
-
-      <!-- Form Error / Success Message -->
+      <!-- Auth Alert Notification -->
       <div class="auth-alert" id="auth-alert" style="display: none;"></div>
 
-      <!-- Sign In Form -->
-      <form class="auth-form" id="signin-form">
-        <div class="form-group">
-          <label for="signin-email">Email Address</label>
-          <input type="email" id="signin-email" placeholder="operative@spectrum.labs" required autocomplete="email">
+      <!-- Logged Out Main View (3 Instant Auth Options) -->
+      <div id="auth-main-options-view">
+        <div class="auth-intro-box">
+          <p>Authenticate to unlock cloud sync and stamp your official Quantum Dopamine Diploma.</p>
         </div>
-        <div class="form-group">
-          <label for="signin-password">Secret Key (Password)</label>
-          <input type="password" id="signin-password" placeholder="••••••••••••" required autocomplete="current-password">
-        </div>
-        <button type="submit" class="btn btn-primary auth-submit-btn" id="signin-submit-btn">
-          <span>AUTHENTICATE OPERATIVE 🚀</span>
+
+        <!-- Option 1: Biometric Passkey -->
+        <button class="auth-choice-btn btn-passkey" id="auth-passkey-btn">
+          <span class="choice-icon">🔑</span>
+          <div class="choice-text">
+            <strong>1-Click Biometric Passkey</strong>
+            <small>Apple FaceID, Android TouchID, or Windows Hello</small>
+          </div>
+          <span class="choice-arrow">⚡</span>
         </button>
-      </form>
 
-      <!-- Sign Up Form (With Email Verification) -->
-      <form class="auth-form" id="signup-form" style="display: none;">
-        <div class="form-group">
-          <label for="signup-name">Operative Codename (Full Name)</label>
-          <input type="text" id="signup-name" placeholder="Dr. Quantum Serotonin" required autocomplete="name">
-        </div>
-        <div class="form-group">
-          <label for="signup-email">Real Email (Verification Required)</label>
-          <input type="email" id="signup-email" placeholder="real.email@domain.com" required autocomplete="email">
-        </div>
-        <div class="form-group">
-          <label for="signup-password">Create Secret Key (Min 6 chars)</label>
-          <input type="password" id="signup-password" placeholder="••••••••••••" minlength="6" required autocomplete="new-password">
-        </div>
-        <button type="submit" class="btn btn-primary auth-submit-btn" id="signup-submit-btn">
-          <span>CREATE ACCOUNT & SEND VERIFICATION EMAIL ✉️</span>
-        </button>
-      </form>
+        <!-- Divider -->
+        <div class="auth-divider"><span>OR EMAIL CODE</span></div>
 
-      <!-- Verification Pending Screen -->
-      <div class="auth-verify-view" id="verify-pending-view" style="display: none;">
-        <div class="verify-icon-pulse">✉️</div>
-        <h4>Confirmation Email Dispatched!</h4>
-        <p class="verify-instructions">
-          We sent a cryptographic verification link to <strong id="verify-target-email">operative@email.com</strong>.<br>
-          Please click the link in your inbox to confirm your account and unlock verified status.
-        </p>
-        <div class="verify-actions">
-          <button class="btn btn-secondary btn-sm" id="verify-back-btn">Back to Sign In</button>
-        </div>
-      </div>
+        <!-- Option 2: Email + Quantum OTP Form -->
+        <form class="auth-email-form" id="auth-email-form">
+          <div class="form-group">
+            <label for="otp-email-input">Your Email Address</label>
+            <input type="email" id="otp-email-input" placeholder="operative@spectrum.labs" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="otp-name-input">Operative Name / Codename</label>
+            <input type="text" id="otp-name-input" placeholder="Dr. Quantum Serotonin" required autocomplete="name">
+          </div>
+          <button type="submit" class="btn btn-primary auth-submit-btn" id="send-otp-btn">
+            <span>DISPATCH 6-DIGIT QUANTUM CODE ✉️</span>
+          </button>
+        </form>
 
-      <!-- Supabase Cloud Credentials Config Tab -->
-      <div class="auth-config-view" id="auth-config-view" style="display: none;">
-        <div class="config-guide">
-          <h4>Connect Free Supabase Project</h4>
-          <p>Get your free keys at <a href="https://supabase.com" target="_blank" rel="noopener">supabase.com</a> (50k MAU free):</p>
-        </div>
-        <div class="form-group">
-          <label for="config-supabase-url">Supabase Project URL</label>
-          <input type="url" id="config-supabase-url" placeholder="https://xyzcompany.supabase.co">
-        </div>
-        <div class="form-group">
-          <label for="config-supabase-key">Supabase Anon Public Key</label>
-          <input type="password" id="config-supabase-key" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...">
-        </div>
-        <button class="btn btn-primary auth-submit-btn" id="save-config-btn">
-          <span>SAVE & ACTIVATE CLOUD AUTH ✨</span>
+        <!-- Divider -->
+        <div class="auth-divider"><span>OR DEVELOPER IDENTITY</span></div>
+
+        <!-- Option 3: GitHub 1-Click Connect -->
+        <button class="auth-choice-btn btn-github" id="auth-github-btn">
+          <span class="choice-icon">🐙</span>
+          <div class="choice-text">
+            <strong>Continue with GitHub</strong>
+            <small>Link your verified GitHub developer identity</small>
+          </div>
+          <span class="choice-arrow">→</span>
         </button>
       </div>
 
-      <!-- Logged In Profile View (If already authenticated) -->
-      <div class="auth-profile-view" id="auth-profile-view" style="display: none;">
+      <!-- Sub-View: 6-Digit OTP Verification Entry -->
+      <div id="auth-otp-verify-view" style="display: none;">
+        <div class="otp-transmitter-card">
+          <div class="transmitter-header">
+            <span class="radar-pulse"></span>
+            <span>TRANSMISSION DISPATCHED</span>
+          </div>
+          <p class="otp-target-desc">We generated a 6-digit cryptographic security code for <strong id="display-otp-email">user@email.com</strong>:</p>
+          <div class="holographic-otp-display" id="holographic-otp-display">
+            <span class="otp-token-value" id="otp-token-val">849204</span>
+            <small>TRANS-CODE // READY</small>
+          </div>
+        </div>
+
+        <form id="otp-confirm-form" class="otp-confirm-form">
+          <div class="form-group">
+            <label for="otp-code-input">Enter the 6-Digit Code</label>
+            <input type="text" id="otp-code-input" class="otp-digit-input" placeholder="••••••" maxlength="6" required autocomplete="one-time-code">
+          </div>
+          <button type="submit" class="btn btn-primary auth-submit-btn" id="confirm-otp-btn">
+            <span>VERIFY & COMPLETE AUTHENTICATION 🚀</span>
+          </button>
+          <button type="button" class="btn btn-secondary btn-sm" id="otp-back-btn" style="margin-top: 10px; width: 100%;">
+            <span>← Back to Options</span>
+          </button>
+        </form>
+      </div>
+
+      <!-- Sub-View: Authenticated Profile View -->
+      <div id="auth-profile-view" style="display: none;">
         <div class="profile-header-box">
           <div class="profile-avatar">🟢</div>
           <div class="profile-info">
-            <h4 id="profile-name-text">Operative Name</h4>
-            <span id="profile-email-text">user@email.com</span>
+            <h4 id="profile-name-text">Dr. Quantum Serotonin</h4>
+            <span id="profile-email-text">operative@spectrum.labs</span>
           </div>
         </div>
         <div class="profile-status-badge">
-          <span>✓ EMAIL VERIFIED & CLOUD SYNC ACTIVE</span>
+          <span id="profile-auth-method-badge">✓ 🔑 BIOMETRIC PASSKEY VERIFIED</span>
         </div>
-        <button class="btn btn-secondary auth-submit-btn" id="signout-btn" style="margin-top: 16px;">
+        <button class="btn btn-secondary auth-submit-btn" id="signout-btn" style="margin-top: 20px;">
           <span>SIGN OUT ✕</span>
         </button>
       </div>

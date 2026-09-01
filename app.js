@@ -12,6 +12,7 @@
     cart: JSON.parse(localStorage.getItem('spectrum_cart') || '[]'),
     xp: parseInt(localStorage.getItem('spectrum_xp') || '450', 10),
     bestScore: parseInt(localStorage.getItem('spectrum_rex_best') || '0', 10),
+    pendingCheckoutAfterAuth: false,
   };
 
   // ------------------------------------------------------------
@@ -510,12 +511,11 @@
       `;
     }
 
-    // Check if user is logged in for diploma name
-    if (window.SpectrumAuth && window.SpectrumAuth.state.user) {
-      const user = window.SpectrumAuth.state.user;
-      const name = user.user_metadata?.full_name || user.email.split('@')[0];
+    // Bind authenticated Operative Name to Certificate
+    if (window.SpectrumAuth && window.SpectrumAuth.isLoggedIn()) {
+      const user = window.SpectrumAuth.getUser();
       const certUserName = document.querySelector('.cert-user-name');
-      if (certUserName) certUserName.textContent = `${name.toUpperCase()} (${user.email})`;
+      if (certUserName) certUserName.textContent = `${user.name.toUpperCase()} [${user.authMethod}]`;
     }
 
     certModal.classList.add('active');
@@ -530,7 +530,10 @@
     window.print();
   });
 
-  checkoutBtn.addEventListener('click', () => {
+  // ------------------------------------------------------------
+  // 7. AUTH-GATED CHECKOUT PROCESS
+  // ------------------------------------------------------------
+  function executeCheckout() {
     if (state.cart.length === 0) {
       playPop(300);
       alert('Your cart is empty! Add some high-tech dopamine first!');
@@ -546,10 +549,34 @@
     toggleCart(false);
 
     openCertificateModal(purchasedCopy, bonusXP);
+  }
+
+  checkoutBtn.addEventListener('click', () => {
+    if (state.cart.length === 0) {
+      playPop(300);
+      alert('Your cart is empty! Add some high-tech dopamine first!');
+      return;
+    }
+
+    // CHECKOUT AUTH GATE
+    if (!window.SpectrumAuth || !window.SpectrumAuth.isLoggedIn()) {
+      playPop(300);
+      state.pendingCheckoutAfterAuth = true;
+      toggleCart(false);
+      
+      const authModal = document.getElementById('auth-modal');
+      authModal.classList.add('active');
+      
+      showAuthAlert('🔒 Operative Authentication Required: Sign in with a Passkey, Email Code, or GitHub to finish checkout and claim your Quantum Diploma.', 'error');
+      return;
+    }
+
+    // If authenticated, proceed immediately
+    executeCheckout();
   });
 
   // ------------------------------------------------------------
-  // 7. REX RUNNER 2D CANVAS MINI-GAME
+  // 8. REX RUNNER 2D CANVAS MINI-GAME
   // ------------------------------------------------------------
   const rexModal = document.getElementById('rex-game-modal');
   const closeGameBtn = document.getElementById('close-game-btn');
@@ -720,28 +747,24 @@
   });
 
   // ------------------------------------------------------------
-  // 8. AUTH MODAL & FORM CONTROLLERS
+  // 9. 3-IN-1 CYBER AUTH MODAL CONTROLLER
   // ------------------------------------------------------------
   const userAuthBtn = document.getElementById('user-auth-btn');
   const authModal = document.getElementById('auth-modal');
   const closeAuthBtn = document.getElementById('close-auth-btn');
   const authAlert = document.getElementById('auth-alert');
 
-  const tabBtnSignin = document.getElementById('tab-btn-signin');
-  const tabBtnSignup = document.getElementById('tab-btn-signup');
-  const tabBtnConfig = document.getElementById('tab-btn-config');
-
-  const signinForm = document.getElementById('signin-form');
-  const signupForm = document.getElementById('signup-form');
-  const verifyPendingView = document.getElementById('verify-pending-view');
-  const authConfigView = document.getElementById('auth-config-view');
+  const authMainOptionsView = document.getElementById('auth-main-options-view');
+  const authOtpVerifyView = document.getElementById('auth-otp-verify-view');
   const authProfileView = document.getElementById('auth-profile-view');
 
-  const configSupabaseUrl = document.getElementById('config-supabase-url');
-  const configSupabaseKey = document.getElementById('config-supabase-key');
-  const saveConfigBtn = document.getElementById('save-config-btn');
+  const authPasskeyBtn = document.getElementById('auth-passkey-btn');
+  const authEmailForm = document.getElementById('auth-email-form');
+  const authGithubBtn = document.getElementById('auth-github-btn');
+
+  const otpConfirmForm = document.getElementById('otp-confirm-form');
+  const otpBackBtn = document.getElementById('otp-back-btn');
   const signoutBtn = document.getElementById('signout-btn');
-  const verifyBackBtn = document.getElementById('verify-back-btn');
 
   function showAuthAlert(msg, type = 'error') {
     authAlert.textContent = msg;
@@ -753,33 +776,33 @@
     authAlert.style.display = 'none';
   }
 
-  function setAuthTab(tab) {
+  function setAuthView(viewName) {
     hideAuthAlert();
-    tabBtnSignin.classList.remove('active');
-    tabBtnSignup.classList.remove('active');
-    tabBtnConfig.classList.remove('active');
-
-    signinForm.style.display = 'none';
-    signupForm.style.display = 'none';
-    verifyPendingView.style.display = 'none';
-    authConfigView.style.display = 'none';
+    authMainOptionsView.style.display = 'none';
+    authOtpVerifyView.style.display = 'none';
     authProfileView.style.display = 'none';
 
-    if (tab === 'signin') {
-      tabBtnSignin.classList.add('active');
-      signinForm.style.display = 'flex';
-    } else if (tab === 'signup') {
-      tabBtnSignup.classList.add('active');
-      signupForm.style.display = 'flex';
-    } else if (tab === 'config') {
-      tabBtnConfig.classList.add('active');
-      authConfigView.style.display = 'flex';
-      configSupabaseUrl.value = window.SpectrumAuth?.state?.supabaseUrl || '';
-      configSupabaseKey.value = window.SpectrumAuth?.state?.supabaseKey || '';
-    } else if (tab === 'profile') {
+    if (viewName === 'options') {
+      authMainOptionsView.style.display = 'block';
+    } else if (viewName === 'otp') {
+      authOtpVerifyView.style.display = 'block';
+    } else if (viewName === 'profile') {
       authProfileView.style.display = 'block';
-    } else if (tab === 'verify') {
-      verifyPendingView.style.display = 'block';
+    }
+  }
+
+  function onAuthSuccess(user) {
+    hideAuthAlert();
+    authModal.classList.remove('active');
+    playCheckoutFanfare();
+    explodeConfetti(window.innerWidth / 2, window.innerHeight / 2, 80);
+
+    // If user was attempting checkout, finish it now!
+    if (state.pendingCheckoutAfterAuth) {
+      state.pendingCheckoutAfterAuth = false;
+      setTimeout(() => {
+        executeCheckout();
+      }, 400);
     }
   }
 
@@ -787,85 +810,80 @@
     playPop(600);
     authModal.classList.add('active');
 
-    if (window.SpectrumAuth && window.SpectrumAuth.state.user) {
-      const user = window.SpectrumAuth.state.user;
-      document.getElementById('profile-name-text').textContent = user.user_metadata?.full_name || 'Operative';
+    if (window.SpectrumAuth && window.SpectrumAuth.isLoggedIn()) {
+      const user = window.SpectrumAuth.getUser();
+      document.getElementById('profile-name-text').textContent = user.name;
       document.getElementById('profile-email-text').textContent = user.email;
-      setAuthTab('profile');
+      document.getElementById('profile-auth-method-badge').textContent = `✓ ${user.authMethod} VERIFIED`;
+      setAuthView('profile');
     } else {
-      setAuthTab('signin');
+      setAuthView('options');
     }
   });
 
   closeAuthBtn.addEventListener('click', () => authModal.classList.remove('active'));
-  tabBtnSignin.addEventListener('click', () => setAuthTab('signin'));
-  tabBtnSignup.addEventListener('click', () => setAuthTab('signup'));
-  tabBtnConfig.addEventListener('click', () => setAuthTab('config'));
-  verifyBackBtn.addEventListener('click', () => setAuthTab('signin'));
+  otpBackBtn.addEventListener('click', () => setAuthView('options'));
 
-  // Handle Sign In Submit
-  signinForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    hideAuthAlert();
-    const email = document.getElementById('signin-email').value;
-    const password = document.getElementById('signin-password').value;
-
+  // 1. Biometric Passkey Click Handler
+  authPasskeyBtn.addEventListener('click', async () => {
     try {
-      showAuthAlert('Authenticating...', 'success');
-      await window.SpectrumAuth.signIn(email, password);
-      playCheckoutFanfare();
-      explodeConfetti(window.innerWidth / 2, window.innerHeight / 2, 60);
-      authModal.classList.remove('active');
+      showAuthAlert('Awaiting device biometric verification (FaceID / TouchID / PIN)...', 'success');
+      const user = await window.SpectrumAuth.authenticateWithPasskey();
+      onAuthSuccess(user);
     } catch (err) {
-      showAuthAlert(err.message || 'Authentication failed');
+      showAuthAlert(err.message || 'Passkey authentication failed.');
     }
   });
 
-  // Handle Sign Up Submit (With Email Verification)
-  signupForm.addEventListener('submit', async (e) => {
+  // 2. Email OTP Request Form Handler
+  authEmailForm.addEventListener('submit', (e) => {
     e.preventDefault();
-    hideAuthAlert();
-    const name = document.getElementById('signup-name').value;
-    const email = document.getElementById('signup-email').value;
-    const password = document.getElementById('signup-password').value;
+    const email = document.getElementById('otp-email-input').value;
+    const name = document.getElementById('otp-name-input').value;
 
     try {
-      showAuthAlert('Dispatching verification email...', 'success');
-      await window.SpectrumAuth.signUp(email, password, name);
-      document.getElementById('verify-target-email').textContent = email;
-      setAuthTab('verify');
+      const result = window.SpectrumAuth.requestEmailOtp(email, name);
+      document.getElementById('display-otp-email').textContent = result.email;
+      document.getElementById('otp-token-val').textContent = result.code;
+      document.getElementById('otp-code-input').value = result.code; // Pre-fill or ready for click
+      
+      setAuthView('otp');
       playDopamineChime();
+      explodeConfetti(window.innerWidth / 2, window.innerHeight / 2, 35);
     } catch (err) {
-      showAuthAlert(err.message || 'Signup failed');
+      showAuthAlert(err.message);
     }
   });
 
-  // Save Cloud Credentials
-  saveConfigBtn.addEventListener('click', () => {
-    const url = configSupabaseUrl.value;
-    const key = configSupabaseKey.value;
-    if (!url || !key) {
-      showAuthAlert('Please provide both Supabase Project URL and Anon Key');
-      return;
+  // 2b. OTP Confirm Form Handler
+  otpConfirmForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const code = document.getElementById('otp-code-input').value;
+
+    try {
+      const user = window.SpectrumAuth.verifyEmailOtp(code);
+      onAuthSuccess(user);
+    } catch (err) {
+      showAuthAlert(err.message);
     }
-    window.SpectrumAuth.saveCredentials(url, key);
-    showAuthAlert('Supabase credentials saved successfully! ✨', 'success');
-    playPop(700);
   });
 
-  // Sign Out
-  signoutBtn.addEventListener('click', async () => {
-    await window.SpectrumAuth.signOut();
+  // 3. GitHub 1-Click Connect Handler
+  authGithubBtn.addEventListener('click', async () => {
+    const handle = prompt('Enter your GitHub username (or press OK for @operative):', 'marcuscaiado');
+    try {
+      const user = await window.SpectrumAuth.authenticateWithGitHub(handle);
+      onAuthSuccess(user);
+    } catch (err) {
+      showAuthAlert('GitHub authentication error');
+    }
+  });
+
+  // Sign Out Handler
+  signoutBtn.addEventListener('click', () => {
+    window.SpectrumAuth.signOut();
     playPop(400);
     authModal.classList.remove('active');
-  });
-
-  // Email Verified Celebration Listener
-  window.addEventListener('spectrum:auth_verified', (e) => {
-    const user = e.detail;
-    addXP(1000, userAuthBtn);
-    playCheckoutFanfare();
-    explodeConfetti(window.innerWidth / 2, window.innerHeight / 2, 100);
   });
 
   updateCartUI();
